@@ -1,0 +1,15 @@
+
+using System;
+
+namespace HekarisAwesome
+{
+
+
+	public struct DBRecord
+	{
+		public int MemberID;
+		public string FirstName;
+		public string LastName;
+		public Date DateOfBirth;
+	}
+}
