@@ -1,0 +1,3 @@
+relre:^.*\.exe$
+relre:^.*\.user$
+relre:^.*\.cache$
