@@ -24,6 +24,11 @@ namespace RD_SharedCode
 			client.Connect(new IPEndPoint(IPAddress.Parse(address), port));
 		}
 
+		public void Disconnect()
+		{
+			client.Dispose();
+		}
+
 		public void Insert(DataRecord record)
 		{
 			byte[] sendbuffer = DataRecord.ToBytes(record);
@@ -31,6 +36,11 @@ namespace RD_SharedCode
 			client.Send(sendbuffer);
 
 			// Listen for Response
+			byte[] recvbuffer = new byte[Shared.kMaxNetBuffer];
+			if (client.Receive(recvbuffer) > 0)
+			{
+
+			}
 		}
 
 		public void Update(DataRecord record)
@@ -40,6 +50,11 @@ namespace RD_SharedCode
 			client.Send(sendbuffer);
 
 			// Listen for Response
+			byte[] recvbuffer = new byte[Shared.kMaxNetBuffer];
+			if (client.Receive(recvbuffer) > 0)
+			{
+
+			}
 		}
 #if false
 		public DataRecord Find(int memberid)

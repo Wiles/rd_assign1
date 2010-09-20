@@ -27,18 +27,8 @@ namespace RD_Assign1
         public void Update(DataRecord record)
         {
             this.WriteMutex.WaitOne();
-            try
-            {
-				this.Records[record.MemberID - 1] = record;
-            }
-            catch (KeyNotFoundException ex)
-            {
-				throw ex;
-            }
-            finally
-            {
-                this.WriteMutex.ReleaseMutex();
-            }
+			this.Records[record.MemberID - 1] = record;
+            this.WriteMutex.ReleaseMutex();
         }
 
         public void Insert(DataRecord record)
@@ -49,23 +39,12 @@ namespace RD_Assign1
 			}
 
             this.WriteMutex.WaitOne();
-            try
-            {
-				record.MemberID = this.Records.Count + 1;
-				this.Records.Add(record.MemberID - 1, record);
+			record.MemberID = this.Records.Count + 1;
+			this.Records.Add(record.MemberID - 1, record);
 				
-				Console.WriteLine("Record Added Id:{0} FirstName:{1} LastName:{2} DateOfBirth:{3}",
-					record.MemberID, record.FirstName, record.LastName, record.DateOfBirth);
-            }
-            catch (Exception ex)
-            {
-				Console.Write(ex.StackTrace);
-				Console.WriteLine();
-            }
-            finally
-            {
-                this.WriteMutex.ReleaseMutex();
-            }
+			Console.WriteLine("Record Added Id:{0} FirstName:{1} LastName:{2} DateOfBirth:{3}",
+				record.MemberID, record.FirstName, record.LastName, record.DateOfBirth);
+            this.WriteMutex.ReleaseMutex();
         }
 
         public DataRecord Find(int MemberID)
