@@ -43,28 +43,43 @@ namespace RD_Assign1
 					{
 						PerformInsert(buffer);
 					}
-					catch (ArgumentException)
+					catch (ArgumentException ex)
 					{
-						byte[] sendbuffer = { (byte)DatabaseMessage.Error_InvalidArgs };
-						Server.Send(GetID(), sendbuffer);
+						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
+						throw ex;
 					}
-					catch (KeyNotFoundException)
+					catch (KeyNotFoundException ex)
 					{
+						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
+						throw ex;
+					}
+					catch (OutOfMemoryException ex)
+					{
+						ErrorReply(Server, DatabaseMessage.Error_OutOfMemory);
+						throw ex;
+					}
 
-					}
-					catch (OutOfMemoryException)
-					{
+					SuccessReply(Server);
 
-					}
 					break;
 				case DatabaseMessage.Comm_Update:
 					try
 					{
 						PerformUpdate(buffer);
 					}
-					catch (Exception)
+					catch (KeyNotFoundException ex)
 					{
+						ErrorReply(Server, DatabaseMessage.Error_ItemNotFound);
+						throw ex;
 					}
+					catch (ArgumentException ex)
+					{
+						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
+						throw ex;
+					}
+					
+					SuccessReply(Server);
+
 					break;
 				case DatabaseMessage.Comm_Find:
 					try
@@ -75,12 +90,19 @@ namespace RD_Assign1
 
 						Server.Send(GetID(), sendbuffer);
 					}
-					catch (KeyNotFoundException)
+					catch (KeyNotFoundException ex)
 					{
+						ErrorReply(Server, DatabaseMessage.Error_ItemNotFound);
+						throw ex;
 					}
-					catch (ArgumentException)
+					catch (ArgumentException ex)
 					{
+						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
+						throw ex;
 					}
+
+					SuccessReply(Server);
+
 					break;
 			}
 		}
@@ -125,6 +147,34 @@ namespace RD_Assign1
 
 			int memid = Shared.ByteArrayToInt32(buffer, 1);
 			return this.database.Find(memid);
+		}
+
+		private void SuccessReply(DatabaseServer server)
+		{
+			try
+			{
+				byte[] sendbuffer = { (byte)DatabaseMessage.None };
+				server.Send(GetID(), sendbuffer);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.StackTrace);
+				Console.ReadKey();
+			}
+		}
+
+		private void ErrorReply(DatabaseServer server, DatabaseMessage reply)
+		{
+			try
+			{
+				byte[] sendbuffer = { (byte)reply };
+				server.Send(GetID(), sendbuffer);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.StackTrace);
+				Console.ReadKey();
+			}
 		}
 	}
 }

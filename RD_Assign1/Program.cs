@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using RD_SharedCode;
 
 namespace RD_Assign1
@@ -28,6 +26,7 @@ namespace RD_Assign1
 			{
 				// Crash to prevent Data Corruption
 				Console.WriteLine(ex.StackTrace);
+				Console.ReadKey();
 			}
 			finally
 			{

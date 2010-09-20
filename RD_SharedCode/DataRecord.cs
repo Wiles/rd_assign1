@@ -33,7 +33,7 @@ namespace RD_SharedCode
 			Int32 memid = Shared.ByteArrayToInt32(buffer, kMemberIDOffset);
 			string firstname = Shared.ByteArrayToString(buffer, DataRecord.kFirstNameMax, kFirstNameOffset).TrimEnd();
 			string lastname = Shared.ByteArrayToString(buffer, DataRecord.kLastNameMax, kLastNameOffset).TrimEnd();
-			DateTime date = DateTime.Parse(Shared.ByteArrayToString(buffer, kFullRecordLen - kDateOfBirthOffset, kDateOfBirthLen));
+			DateTime date = DateTime.Parse(Shared.ByteArrayToString(buffer, kFullRecordLen - kDateOfBirthLen, kDateOfBirthOffset));
 
 			return new DataRecord(memid, firstname, lastname, date);
 		}

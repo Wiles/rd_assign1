@@ -10,21 +10,32 @@ namespace RD_Assign1_Client1
 	{
 		static void Main(string[] args)
 		{
+	start:
 			Console.WriteLine("(DataClient): Starting...");
 			try
 			{
-				DatabaseClient client = new DatabaseClient();
-				client.Connect("127.0.0.1", 8021);
+				for (int i = 1; i <= 40000; i++)
+				{
+					DatabaseClient client = new DatabaseClient();
+					Console.WriteLine("(DataClient): Connecting");
+					client.Connect("127.0.0.1", 8021);
 
-				DataRecord record = new DataRecord(1, "hekar", "khani", DateTime.Now);
-				client.Insert(record);
+					Console.WriteLine("(DataClient): Inserting Record {0}", i);
+					DataRecord record = new DataRecord(i, "Butt", "Cheeks", DateTime.Now);
+					client.Insert(record);
+
+					Console.WriteLine("(DataClient): Disconnecting");
+					client.Disconnect();
+				}
 			}
 			catch (Exception)
 			{	
 			}
-
+			
 			Console.WriteLine("(DataClient): Shutting Down");
 			Console.ReadKey();
+
+			goto start;
 		}
 	}
 }

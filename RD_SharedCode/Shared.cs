@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace RD_SharedCode
@@ -12,7 +11,7 @@ namespace RD_SharedCode
 
 		Error_InvalidArgs,
 		Error_ItemNotFound,
-		Error_AlreadyExists,
+		Error_OutOfMemory,
 
 		Comm_Insert,
 		Comm_Update,
@@ -23,6 +22,8 @@ namespace RD_SharedCode
 
 	public class Shared
 	{
+		public const int kMaxNetBuffer = 2048;
+
 		public static Int32 ByteArrayToInt32(byte[] array, int offset = 0)
 		{
 			Int32 converted =
@@ -45,22 +46,6 @@ namespace RD_SharedCode
 
 			return converted;
 		}
-
-		public static Int64 ByteArrayToInt64(byte[] array, int offset = 0)
-		{
-			Int64 converted =
-						((int)array[0 + offset]) |
-						(8 << (int)array[1 + offset]) |
-						(16 << (int)array[2 + offset]) |
-						(24 << (int)array[3 + offset]) |
-						(32 << (int)array[4 + offset]) |
-						(40 << (int)array[5 + offset]) |
-						(48 << (int)array[6 + offset]) |
-						(56 << (int)array[7 + offset]);
-
-			return converted;
-		}
-
 
 		static UTF8Encoding utf8encoder = new UTF8Encoding();
 		public static string ByteArrayToString(byte[] buffer, int size, int offset)
