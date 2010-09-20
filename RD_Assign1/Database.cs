@@ -1,33 +1,39 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using RD_SharedCode;
 
 namespace RD_Assign1
 {
     public class Database : IDisposable
     {
         // Default allocation for database
-        private const int kDefaultCapacity = 40000;
+        private const int kDefaultMaxCapacity = 40000;
 
         private SortedList<int, DataRecord> Records;
         private Mutex WriteMutex;
 
         public Database()
         {
-            this.Records = new SortedList<int, DataRecord>(kDefaultCapacity);
+            this.Records = new SortedList<int, DataRecord>(kDefaultMaxCapacity);
             this.WriteMutex = new Mutex();
         }
+		
+		public void Dispose()
+		{
+			// Save Datastore, etc
+		}
 
-        public void Update(int MemberID, string FirstName, string LastName, DateTime DateOfBirth)
+        public void Update(DataRecord record)
         {
             this.WriteMutex.WaitOne();
             try
             {
-                var data = new DataRecord(MemberID, FirstName, LastName, DateOfBirth);
-                this.Records[MemberID] = data;
+				this.Records[record.MemberID - 1] = record;
             }
             catch (KeyNotFoundException ex)
             {
+				throw ex;
             }
             finally
             {
@@ -35,16 +41,26 @@ namespace RD_Assign1
             }
         }
 
-        public void Insert(int MemberID, string FirstName, string LastName, DateTime DateOfBirth)
+        public void Insert(DataRecord record)
         {
+			if (this.Records.Count + 1 > kDefaultMaxCapacity)
+			{
+				throw new OutOfMemoryException();
+			}
+
             this.WriteMutex.WaitOne();
             try
             {
-                var data = new DataRecord(MemberID, FirstName, LastName, DateOfBirth);
-                this.Records.Add(MemberID, data);
+				record.MemberID = this.Records.Count + 1;
+				this.Records.Add(record.MemberID - 1, record);
+				
+				Console.WriteLine("Record Added Id:{0} FirstName:{1} LastName:{2} DateOfBirth:{3}",
+					record.MemberID, record.FirstName, record.LastName, record.DateOfBirth);
             }
             catch (Exception ex)
             {
+				Console.Write(ex.StackTrace);
+				Console.WriteLine();
             }
             finally
             {
@@ -54,7 +70,7 @@ namespace RD_Assign1
 
         public DataRecord Find(int MemberID)
         {
-            return this.Records[MemberID];
+            return this.Records[MemberID - 1];
         }
-    }
+	}
 }

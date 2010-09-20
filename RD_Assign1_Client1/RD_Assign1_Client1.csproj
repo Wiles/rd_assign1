@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8BCC270F-A421-4B7F-97B3-D846CFF8C6EE}</ProjectGuid>
+    <ProjectGuid>{DE4722B8-472D-4022-943F-C43EDEEAA62D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RD_Assign1</RootNamespace>
-    <AssemblyName>RD_Assign1</AssemblyName>
+    <RootNamespace>RD_Assign1_Client1</RootNamespace>
+    <AssemblyName>RD_Assign1_Client1</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -36,7 +36,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,12 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database.cs" />
-    <Compile Include="DatabaseListener.cs" />
-    <Compile Include="ISocketListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DatabaseServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RD_SharedCode\RD_SharedCode.csproj">
