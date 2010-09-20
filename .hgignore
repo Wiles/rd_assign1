@@ -1,3 +1,7 @@
 relre:^.*\.exe$
 relre:^.*\.user$
 relre:^.*\.cache$
+relre:^.*\.pdb$
+relre:^.*\.txt
+relre:^.*\.dll
+relre:^.*\.manifest

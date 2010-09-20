@@ -6,9 +6,8 @@ namespace RD_Assign1
     {
         int GetID();
 
-        void OnBind(SocketServer Server);
-        void OnConnect(SocketServer Server);
-        void OnReceive(SocketServer Server);
-        void OnClose(SocketServer Server);
+        void OnConnect(DatabaseServer Server);
+        void OnReceive(DatabaseServer Server, byte[] buffer);
+        void OnClose(DatabaseServer Server);
     }
 }
