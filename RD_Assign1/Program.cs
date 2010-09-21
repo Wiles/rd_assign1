@@ -19,7 +19,7 @@ namespace RD_Assign1
 				Console.WriteLine("(DataServer): Binding.");
 				server.Bind();
 				Console.WriteLine("(DataServer): Entering Message Loop.");
-				server.MessageLoop();
+				server.ServerLoop();
 				Console.WriteLine("(DataServer): Exiting Message Loop.");
 			}
 			catch (Exception ex)

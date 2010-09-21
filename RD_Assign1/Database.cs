@@ -5,7 +5,7 @@ using RD_SharedCode;
 
 namespace RD_Assign1
 {
-    public class Database : RD_Assign1.IDatabase
+    public class Database
     {
         // Default allocation for database
         private const int kDefaultMaxCapacity = 40000;
