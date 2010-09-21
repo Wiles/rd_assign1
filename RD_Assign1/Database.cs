@@ -5,7 +5,7 @@ using RD_SharedCode;
 
 namespace RD_Assign1
 {
-    public class Database : IDisposable
+    public class Database : RD_Assign1.IDatabase
     {
         // Default allocation for database
         private const int kDefaultMaxCapacity = 40000;
@@ -18,11 +18,6 @@ namespace RD_Assign1
             this.Records = new SortedList<int, DataRecord>(kDefaultMaxCapacity);
             this.WriteMutex = new Mutex();
         }
-		
-		public void Dispose()
-		{
-			// Save Datastore, etc
-		}
 
         public void Update(DataRecord record)
         {
@@ -42,7 +37,8 @@ namespace RD_Assign1
 			record.MemberID = this.Records.Count + 1;
 			this.Records.Add(record.MemberID - 1, record);
 				
-			Console.WriteLine("Record Added Id:{0} FirstName:{1} LastName:{2} DateOfBirth:{3}",
+			Console.WriteLine("Record Added");
+            Console.WriteLine("\tId: {0}\n\tFirstName: {1}\n\tLastName: {2}\n\tDateOfBirth: {3}\n",
 				record.MemberID, record.FirstName, record.LastName, record.DateOfBirth);
             this.WriteMutex.ReleaseMutex();
         }

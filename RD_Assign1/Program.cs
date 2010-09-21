@@ -24,9 +24,9 @@ namespace RD_Assign1
 			}
 			catch (Exception ex)
 			{
+                Console.WriteLine("Message: {0}", ex.Message);
 				// Crash to prevent Data Corruption
 				Console.WriteLine(ex.StackTrace);
-				Console.ReadKey();
 			}
 			finally
 			{

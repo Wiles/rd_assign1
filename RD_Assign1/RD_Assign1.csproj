@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Database.cs" />
     <Compile Include="DatabaseListener.cs" />
+    <Compile Include="IDatabase.cs" />
     <Compile Include="ISocketListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

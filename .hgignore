@@ -5,3 +5,4 @@ relre:^.*\.pdb$
 relre:^.*\.txt
 relre:^.*\.dll
 relre:^.*\.manifest
+relre:^.*.orig$
