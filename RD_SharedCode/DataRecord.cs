@@ -20,6 +20,9 @@ namespace RD_SharedCode
 			// Extract the elements from the delimited csv
 			string data = Shared.ByteArrayToString(buffer, buffer.Length, 0);
 
+			// Only take up to the null terminator
+			data = data.Substring(0, data.IndexOf('\0'));
+
 			string[] tokens = data.Split(kSeparator);
 
 			Int32 memid = int.Parse(tokens[1]);
@@ -44,6 +47,7 @@ namespace RD_SharedCode
 			builder.Append(this.LastName);
 			builder.Append(kSeparator);
 			builder.Append(this.DateOfBirth.ToString());
+			builder.Append(kSeparator);
 
 			return Shared.StringToByteArray(builder.ToString());
 		}

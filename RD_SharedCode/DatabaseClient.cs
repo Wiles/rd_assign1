@@ -39,7 +39,15 @@ namespace RD_SharedCode
 			byte[] recvbuffer = new byte[Shared.kMaxNetBuffer];
 			if (client.Receive(recvbuffer) > 0)
 			{
-
+				DatabaseMessage message = (DatabaseMessage)recvbuffer[0];
+				if (message == DatabaseMessage.Error_InvalidArgs)
+				{
+					throw new ArgumentException();
+				}
+				else if (message == DatabaseMessage.Error_OutOfMemory)
+				{
+					throw new OutOfMemoryException();
+				}
 			}
 		}
 
@@ -53,7 +61,15 @@ namespace RD_SharedCode
 			byte[] recvbuffer = new byte[Shared.kMaxNetBuffer];
 			if (client.Receive(recvbuffer) > 0)
 			{
-
+				DatabaseMessage message = (DatabaseMessage)recvbuffer[0];
+				if (message == DatabaseMessage.Error_InvalidArgs)
+				{
+					throw new ArgumentException();
+				}
+				else if (message == DatabaseMessage.Error_OutOfMemory)
+				{
+					throw new OutOfMemoryException();
+				}
 			}
 		}
 #if false

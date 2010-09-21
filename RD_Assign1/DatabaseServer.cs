@@ -24,14 +24,6 @@ namespace RD_Assign1
 		private Mutex SendMutex;
 		private ManualResetEvent AcceptEvent = new ManualResetEvent(false);
 
-		// Store recieved data between ASync requests
-		private class RecieveObject
-		{
-			public Socket client;
-			public ISocketListener listener;
-			public byte[] buffer = new byte[Shared.kMaxNetBuffer];
-		}
-
 		public DatabaseServer(Database database)
 		{
 			this.Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -77,17 +69,17 @@ namespace RD_Assign1
 			}
 		}
 
-		private void OnClientConnected(Object client)
+		private void OnClientConnected(Object clientsocket)
 		{
-			Socket handler = (Socket)client;
+			Socket client = (Socket)clientsocket;
 
 			Console.WriteLine("(DataServer) Accepted Client Connection");
 
 			// Add the client to the hashtable
-			this.Clients.Add(handler.GetHashCode(), handler);
+			this.Clients.Add(client.GetHashCode(), client);
 
 			// Create the listener
-			ISocketListener listener = new DatabaseListener(this.database, handler.GetHashCode());
+			ISocketListener listener = new DatabaseListener(this.database, client.GetHashCode());
 			listener.OnConnect(this);
 
 			Console.WriteLine("(DataServer) Setting up Recieve State");
@@ -96,22 +88,31 @@ namespace RD_Assign1
 			byte[] buffer = new byte[Shared.kMaxNetBuffer];
 			while (listening)
 			{
-				int size = handler.Receive(buffer, Shared.kMaxNetBuffer, 0);
-				if (size > 0)
+				try
 				{
-					if (buffer[0] == (byte)DatabaseMessage.Server_Close)
+					int size = client.Receive(buffer, Shared.kMaxNetBuffer, 0);
+					if (size > 0)
 					{
-						CloseClientConnection(listener, handler);
-						listening = false;
+						if (buffer[0] == (byte)DatabaseMessage.Server_Close)
+						{
+							CloseClientConnection(listener, client);
+							listening = false;
+						}
+						else
+						{
+							listener.OnReceive(this, buffer);
+						}
 					}
 					else
 					{
-						listener.OnReceive(this, buffer);
+						CloseClientConnection(listener, client);
+						listening = false;
 					}
 				}
-				else
+				catch (SocketException)
 				{
-					CloseClientConnection(listener, handler);
+					Console.WriteLine("(DataServer) Errornous Client Disconnection");
+					CloseClientConnection(listener, client);
 					listening = false;
 				}
 			}
@@ -124,7 +125,7 @@ namespace RD_Assign1
 			this.Clients.Remove(client.GetHashCode());
 		}
 
-		public void MessageLoop()
+		public void ServerLoop()
 		{
 			while (this.Running)
 			{

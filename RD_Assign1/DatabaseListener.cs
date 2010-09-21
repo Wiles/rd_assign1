@@ -38,20 +38,25 @@ namespace RD_Assign1
 					{
 						PerformInsert(buffer);
 					}
-					catch (ArgumentException ex)
+					catch (ArgumentException)
 					{
 						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
-						throw ex;
 					}
-					catch (KeyNotFoundException ex)
+					catch (KeyNotFoundException)
 					{
 						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
-						throw ex;
 					}
-					catch (OutOfMemoryException ex)
+					catch (OutOfMemoryException)
 					{
 						ErrorReply(Server, DatabaseMessage.Error_OutOfMemory);
-						throw ex;
+					}
+					catch (IndexOutOfRangeException)
+					{
+						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
+					}
+					catch (FormatException)
+					{
+						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
 					}
 
 					SuccessReply(Server);
@@ -62,17 +67,19 @@ namespace RD_Assign1
 					{
 						PerformUpdate(buffer);
 					}
-					catch (KeyNotFoundException ex)
+					catch (KeyNotFoundException)
 					{
 						ErrorReply(Server, DatabaseMessage.Error_ItemNotFound);
-						throw ex;
 					}
-					catch (IndexOutOfRangeException ex)
+					catch (IndexOutOfRangeException)
 					{
 						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
-						throw ex;
 					}
-					
+					catch (FormatException)
+					{
+						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
+					}
+
 					SuccessReply(Server);
 
 					break;
@@ -85,17 +92,15 @@ namespace RD_Assign1
 
 						Server.Send(GetID(), sendbuffer);
 					}
-					catch (KeyNotFoundException ex)
+					catch (KeyNotFoundException)
 					{
 						ErrorReply(Server, DatabaseMessage.Error_ItemNotFound);
-						throw ex;
 					}
-					catch (IndexOutOfRangeException ex)
+					catch (IndexOutOfRangeException)
 					{
 						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
-						throw ex;
 					}
-
+					
 					SuccessReply(Server);
 
 					break;
