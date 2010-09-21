@@ -77,10 +77,9 @@ namespace RD_Assign1
 			}
 		}
 
-		private void OnClientConnected(IAsyncResult result)
+		private void OnClientConnected(Object client)
 		{
-			Socket server = (Socket)result.AsyncState;
-			Socket handler = server.EndAccept(result);
+			Socket handler = (Socket)client;
 
 			Console.WriteLine("(DataServer) Accepted Client Connection");
 
@@ -93,55 +92,48 @@ namespace RD_Assign1
 
 			Console.WriteLine("(DataServer) Setting up Recieve State");
 
-			RecieveObject recvstate = new RecieveObject();
-			recvstate.client = handler;
-			recvstate.listener = listener;
-
-			Console.WriteLine("(DataServer) Listening for Response");
-
-			handler.BeginReceive(recvstate.buffer, 0, Shared.kMaxNetBuffer, 0,
-				new AsyncCallback(OnRecieved), recvstate);
-		}
-
-		private void OnRecieved(IAsyncResult result)
-		{
-			RecieveObject recvstate = (RecieveObject)result.AsyncState;
-			ISocketListener listener = recvstate.listener;
-			Socket handler = recvstate.client;
-
-			Console.WriteLine("(DataServer) Recieving Data");
-
-			int size = handler.EndReceive(result);
-
-			if (size > 0)
+			bool listening = true;
+			byte[] buffer = new byte[Shared.kMaxNetBuffer];
+			while (listening)
 			{
-				Console.WriteLine("(DataServer) Recieved Data. Processing Data");
-				try
+				int size = handler.Receive(buffer, Shared.kMaxNetBuffer, 0);
+				if (size > 0)
 				{
-					listener.OnReceive(this, recvstate.buffer);
-					Console.WriteLine("(DataServer) Completed OnRecieve");
+					if (buffer[0] == (byte)DatabaseMessage.Server_Close)
+					{
+						CloseClientConnection(listener, handler);
+						listening = false;
+					}
+					else
+					{
+						listener.OnReceive(this, buffer);
+					}
 				}
-				catch (Exception ex)
+				else
 				{
-					Console.WriteLine(ex.StackTrace);
-					Console.ReadKey();
+					CloseClientConnection(listener, handler);
+					listening = false;
 				}
 			}
-			
-			// Close the connection
+		}
+
+		private void CloseClientConnection(ISocketListener listener, Socket client)
+		{
 			listener.OnClose(this);
-			handler.Close();
-			this.Clients.Remove(handler.GetHashCode());
+			client.Close();
+			this.Clients.Remove(client.GetHashCode());
 		}
 
 		public void MessageLoop()
 		{
 			while (this.Running)
 			{
-				if (this.Socket.Poll(1000000, SelectMode.SelectRead))
-				{
-					this.Socket.BeginAccept(new AsyncCallback(OnClientConnected), this.Socket);
-				}
+				Socket client = this.Socket.Accept();
+
+				// Pass the client to a listening thread
+				ParameterizedThreadStart acceptthreadstart = OnClientConnected;
+				Thread acceptthread = new Thread(acceptthreadstart);
+				acceptthread.Start(client);
 			}
 		}
 	}
