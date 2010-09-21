@@ -31,7 +31,7 @@ namespace RD_SharedCode
 
 		public void Insert(DataRecord record)
 		{
-			byte[] sendbuffer = DataRecord.ToBytes(record);
+			byte[] sendbuffer = record.ToBytes();
 			sendbuffer[0] = (byte)DatabaseMessage.Comm_Insert;
 			client.Send(sendbuffer);
 
@@ -45,7 +45,7 @@ namespace RD_SharedCode
 
 		public void Update(DataRecord record)
 		{
-			byte[] sendbuffer = DataRecord.ToBytes(record);
+			byte[] sendbuffer = record.ToBytes();
 			sendbuffer[0] = (byte)DatabaseMessage.Comm_Update;
 			client.Send(sendbuffer);
 

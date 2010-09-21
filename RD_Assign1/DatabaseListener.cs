@@ -9,11 +9,6 @@ namespace RD_Assign1
 	/// </summary>
 	public class DatabaseListener : ISocketListener
 	{
-		// Used for error checking. Just the size of the command data alone;
-		const int kBufferInsertSize = sizeof(Int32) + DataRecord.kFirstNameMax + DataRecord.kLastNameMax + sizeof(Int64);
-		const int kBufferUpdateSize = sizeof(Int32) + DataRecord.kFirstNameMax + DataRecord.kLastNameMax + sizeof(Int64);
-		const int kBufferFindSize = sizeof(Int32);
-
 		Int32 ID;
 		Database database;
 
@@ -72,7 +67,7 @@ namespace RD_Assign1
 						ErrorReply(Server, DatabaseMessage.Error_ItemNotFound);
 						throw ex;
 					}
-					catch (ArgumentException ex)
+					catch (IndexOutOfRangeException ex)
 					{
 						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
 						throw ex;
@@ -85,8 +80,8 @@ namespace RD_Assign1
 					try
 					{
 						DataRecord record = PerformFind(buffer);
-						byte[] sendbuffer = DataRecord.ToBytes(record);
-						sendbuffer[0] = (byte)DatabaseMessage.Recv_Find;
+						byte[] sendbuffer = record.ToBytes();
+						sendbuffer[0] = (byte)DatabaseMessage.Client_Find;
 
 						Server.Send(GetID(), sendbuffer);
 					}
@@ -95,7 +90,7 @@ namespace RD_Assign1
 						ErrorReply(Server, DatabaseMessage.Error_ItemNotFound);
 						throw ex;
 					}
-					catch (ArgumentException ex)
+					catch (IndexOutOfRangeException ex)
 					{
 						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
 						throw ex;
@@ -113,38 +108,18 @@ namespace RD_Assign1
 
 		private void PerformInsert(byte[] buffer)
 		{
-			if (buffer.Length < kBufferInsertSize)
-			{
-				// Not enough arguments
-				throw new ArgumentException();
-			}
-			else
-			{
-				DataRecord record = DataRecord.FromBytes(buffer);
-				this.database.Insert(record);
-			}
+			DataRecord record = DataRecord.FromBytes(buffer);
+			this.database.Insert(record);
 		}
 
 		private void PerformUpdate(byte[] buffer)
 		{
-			if (buffer.Length < kBufferUpdateSize)
-			{
-				throw new ArgumentException();
-			}
-			else
-			{
-				DataRecord record = DataRecord.FromBytes(buffer);
-				this.database.Update(record);
-			}
+			DataRecord record = DataRecord.FromBytes(buffer);
+			this.database.Update(record);
 		}
 
 		private DataRecord PerformFind(byte[] buffer)
 		{
-			if (buffer.Length < kBufferFindSize)
-			{
-				throw new ArgumentException();
-			}
-
 			int memid = Shared.ByteArrayToInt32(buffer, 1);
 			return this.database.Find(memid);
 		}
@@ -153,7 +128,7 @@ namespace RD_Assign1
 		{
 			try
 			{
-				byte[] sendbuffer = { (byte)DatabaseMessage.None };
+				byte[] sendbuffer = { (byte)DatabaseMessage.Success };
 				server.Send(GetID(), sendbuffer);
 			}
 			catch (Exception ex)

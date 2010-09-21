@@ -7,7 +7,7 @@ namespace RD_SharedCode
 	// Maximum 255 entries
 	public enum DatabaseMessage
 	{
-		None = 0,
+		Success = 0,
 
 		Error_InvalidArgs,
 		Error_ItemNotFound,
@@ -17,7 +17,10 @@ namespace RD_SharedCode
 		Comm_Update,
 		Comm_Find,
 
-		Recv_Find,
+		// Return a finding to the client
+		Client_Find,
+		// Tell the server to close our connection
+		Server_Close
 	}
 
 	public class Shared
