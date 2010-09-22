@@ -57,7 +57,7 @@ namespace RD_Assign1
 					catch (FormatException)
 					{
 						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
-					}
+					}   
 
 					SuccessReply(Server);
 
@@ -125,8 +125,8 @@ namespace RD_Assign1
 
 		private DataRecord PerformFind(byte[] buffer)
 		{
-			int memid = Shared.ByteArrayToInt32(buffer, 1);
-			return this.database.Find(memid);
+            DataRecord record = DataRecord.FromBytes(buffer);
+			return this.database.Find(record.MemberID);
 		}
 
 		private void SuccessReply(DatabaseServer server)
