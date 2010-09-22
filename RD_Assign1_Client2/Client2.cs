@@ -51,7 +51,7 @@ namespace RD_Assign1_Client1
 
                     try
                     {
-                        client.Find(record);
+                        client.Find(ref record);
                     }
                     catch (ArgumentException)
                     {

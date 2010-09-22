@@ -42,10 +42,10 @@ namespace RD_SharedCode
 		{
 			byte[] converted = new byte[4];
 
-			converted[0] = (byte)(data & 0x000F);
-			converted[1] = (byte)((data >> 8) & 0x00F0);
-			converted[2] = (byte)((data >> 16) & 0x0F00);
-			converted[3] = (byte)((data >> 24) & 0xF000);
+            converted[0] = (byte)(data &            0x000000FF);
+			converted[1] = (byte)((data >> 8) &     0x0000FF00);
+			converted[2] = (byte)((data >> 16) &    0x00FF0000);
+			converted[3] = (byte)((data >> 24) &    0xFF000000);
 
 			return converted;
 		}

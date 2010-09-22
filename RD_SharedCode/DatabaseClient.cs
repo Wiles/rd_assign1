@@ -73,7 +73,7 @@ namespace RD_SharedCode
 			}
 		}
 
-        public void Find(DataRecord record)
+        public void Find(ref DataRecord record)
         {
             byte[] sendbuffer = record.ToBytes();
             sendbuffer[0] = (byte)DatabaseMessage.Comm_Find;
@@ -92,6 +92,7 @@ namespace RD_SharedCode
                 {
                     throw new OutOfMemoryException();
                 }
+                record = DataRecord.FromBytes(recvbuffer);
             }
         }
 
