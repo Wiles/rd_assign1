@@ -72,17 +72,28 @@ namespace RD_SharedCode
 				}
 			}
 		}
-#if false
-		public DataRecord Find(int memberid)
-		{
-			byte[] sendbuffer = new byte[5];
-			sendbuffer[0] = (byte)DatabaseMessage.Comm_Find;
-			Shared.ByteArrayToInt32(memberid);
-			client.Send(sendbuffer);
 
-			// Listen for Response
-		}
-#endif
+        public void Find(DataRecord record)
+        {
+            byte[] sendbuffer = record.ToBytes();
+            sendbuffer[0] = (byte)DatabaseMessage.Comm_Find;
+            client.Send(sendbuffer);
+
+            // Listen for Response
+            byte[] recvbuffer = new byte[Shared.kMaxNetBuffer];
+            if (client.Receive(recvbuffer) > 0)
+            {
+                DatabaseMessage message = (DatabaseMessage)recvbuffer[0];
+                if (message == DatabaseMessage.Error_InvalidArgs)
+                {
+                    throw new ArgumentException();
+                }
+                else if (message == DatabaseMessage.Error_OutOfMemory)
+                {
+                    throw new OutOfMemoryException();
+                }
+            }
+        }
 
 	}
 }
