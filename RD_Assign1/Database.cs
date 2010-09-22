@@ -13,7 +13,7 @@ namespace RD_Assign1
         private SortedList<int, DataRecord> Records;
         private Mutex WriteMutex;
 
-        public Database()
+        public Database( )
         {
             this.Records = new SortedList<int, DataRecord>(kDefaultMaxCapacity);
             this.WriteMutex = new Mutex();
