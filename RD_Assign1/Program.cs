@@ -11,7 +11,7 @@ namespace RD_Assign1
 			Console.WriteLine("(DataServer): Starting Up...");
 			try
 			{
-				Database database = new Database();
+				Database database = new Database( "xmlRecords.xml" );
 				Console.WriteLine("(DataServer): Database Initialized.");
 				Console.WriteLine("(DataServer): Database Server Starting...");
 				DatabaseServer server = new DatabaseServer(database);
