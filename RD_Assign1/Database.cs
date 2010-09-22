@@ -1,3 +1,15 @@
+/**
+ * @file
+ * @author  Hekar Kahni, Samuel Lewis
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * Database class represents a relational database
+ * XML is used to save and retrieve information from the database
+ * 
+ */
+
+
 using System;
 using System.Xml;
 using System.IO;
@@ -69,31 +81,31 @@ namespace RD_Assign1
                 this.XMLCreateFile();
             }
 
-            XmlDocument myXmlDoc = new XmlDocument();
+            XmlDocument xmlDoc = new XmlDocument();
 
-            myXmlDoc.Load(this.xmlFilePath);
+            xmlDoc.Load(this.xmlFilePath);
 
-            XmlElement newElement = myXmlDoc.CreateElement("Member");
+            XmlElement newElement = xmlDoc.CreateElement("Member");
 
-            XmlAttribute newAttribut = myXmlDoc.CreateAttribute("ID");
+            XmlAttribute newAttribut = xmlDoc.CreateAttribute("ID");
             newAttribut.Value = record.MemberID.ToString();
             newElement.SetAttributeNode(newAttribut);
 
-            XmlElement elementFirstName = myXmlDoc.CreateElement("FirstName");
+            XmlElement elementFirstName = xmlDoc.CreateElement("FirstName");
             elementFirstName.InnerText = record.FirstName;
             newElement.AppendChild(elementFirstName);
 
-            XmlElement elementLastName = myXmlDoc.CreateElement("LastName");
+            XmlElement elementLastName = xmlDoc.CreateElement("LastName");
             elementLastName.InnerText = record.LastName;
             newElement.AppendChild(elementLastName);
 
-            XmlElement elementDOB = myXmlDoc.CreateElement("DateOfBirth");
+            XmlElement elementDOB = xmlDoc.CreateElement("DateOfBirth");
             elementDOB.InnerText = record.DateOfBirth.ToString();
             newElement.AppendChild(elementDOB);
 
-            myXmlDoc.DocumentElement.InsertAfter(newElement, myXmlDoc.DocumentElement.LastChild);
+            xmlDoc.DocumentElement.InsertAfter(newElement, xmlDoc.DocumentElement.LastChild);
 
-            myXmlDoc.Save(this.xmlFilePath);
+            xmlDoc.Save(this.xmlFilePath);
 
         }
 
@@ -115,8 +127,7 @@ namespace RD_Assign1
                 throw new KeyNotFoundException();
             }
 
-            xmlNodes[0].ParentNode.RemoveChild(xmlNodes[0]);
-            
+            xmlNodes[0].ParentNode.RemoveChild((XmlNode)xmlNodes[0]);
         }
 
         private void XMLFindRecord(ref DataRecord record)
@@ -141,6 +152,7 @@ namespace RD_Assign1
             record.FirstName = xmlRecord.GetElementsByTagName("FirstName")[0].InnerText;
             record.LastName = xmlRecord.GetElementsByTagName("LastName")[0].InnerText;
             record.DateOfBirth = DateTime.Parse( xmlRecord.GetElementsByTagName("DateOfBirth")[0].InnerText );
+            
         }
 
         private void XMLCreateFile()
@@ -172,6 +184,7 @@ namespace RD_Assign1
                    this.CurrentMemberID = nodeMemberID;
                }
             }
+            
         }
 	}
 }

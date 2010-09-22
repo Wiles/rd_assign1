@@ -9,8 +9,6 @@ namespace RD_Assign1_Client1
     {
         static void Main(string[] args)
         {
-            int delayms = 1500;
-
 
 
             Console.WriteLine("(FindClient): Starting...");
@@ -28,7 +26,7 @@ namespace RD_Assign1_Client1
                     do
                     {
                         success = true;
-                        Console.Write("Enter an integer value: ");
+                        Console.Write("Enter ID an integer value: ");
                         temp = Console.ReadLine();
                         try
                         {
@@ -63,15 +61,71 @@ namespace RD_Assign1_Client1
                         Console.WriteLine("(FindClient): Database is full");
                         continue;
                     }
+                    catch (KeyNotFoundException)
+                    {
+                        Console.WriteLine("(FindClient): Record not found");
+                        continue;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        continue;
+                    }
 
                     Console.WriteLine("MemberID:{0}", record.MemberID);
                     Console.WriteLine("First name:{0}", record.FirstName);
                     Console.WriteLine("Last name:{0}", record.LastName);
                     Console.WriteLine("DOB:{0}", record.DateOfBirth);
 
+                    Console.WriteLine("Would you like to update this record?(y/n):");
+
+                    string answer = Console.ReadLine();
+                    try
+                    {
+                        if (answer == "y" || answer == "Y")
+                        {
+                            Console.WriteLine("Enter First Name( Blank for original):");
+                            string newFirstName = Console.ReadLine();
+                            Console.WriteLine("Enter Last Name( Blank for original):");
+                            string newLastName = Console.ReadLine();
+                            Console.WriteLine("Enter DOB( MM/DD/YYYY HH:MM:SS )(Blank for original):");
+                            string sNewDOB = Console.ReadLine();
+
+                            if (sNewDOB != "")
+                            {
+
+                                record.DateOfBirth = DateTime.Parse(sNewDOB);
+                            }
+
+                            if (newFirstName != "")
+                            {
+                                record.FirstName = newFirstName;
+                            }
+                            if (newLastName != "")
+                            {
+                                record.LastName = newLastName;
+                            }
+                            try
+                            {
+                                client.Update(record);
+                            }
+                            catch (ArgumentException)
+                            {
+                                Console.WriteLine("(DataClient): Error, bad response");
+                            }
+                            catch (OutOfMemoryException)
+                            {
+                                Console.WriteLine("(DataClient): Database is full");
+                            }
 
 
-                    Thread.Sleep(delayms);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+
                 }
 
                 Console.WriteLine("(FindClient): Disconnecting");
@@ -86,5 +140,7 @@ namespace RD_Assign1_Client1
             Console.WriteLine("(FindClient): Shutting Down");
             Console.ReadKey();
         }
+
+
     }
 }

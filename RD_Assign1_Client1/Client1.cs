@@ -9,7 +9,7 @@ namespace RD_Assign1_Client1
     {
         static void Main(string[] args)
         {
-            int delayms = 1500;
+            int delayms = 1;
 
             int argc = args.GetUpperBound(0);
             if (argc > 2)

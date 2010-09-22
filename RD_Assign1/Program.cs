@@ -1,4 +1,17 @@
-﻿using System;
+﻿/**
+ * @file
+ * @author  Hekar Kahni, Samuel Lewis
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * 
+ * Runs a database allows clients to connect through TCP/IP
+ * 
+ * 
+ */
+
+
+using System;
 using System.Collections.Generic;
 using RD_SharedCode;
 
