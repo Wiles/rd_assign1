@@ -1,4 +1,13 @@
-﻿using System;
+﻿/**
+ * @file
+ * @author  Hekar Kahni, Samuel Lewis
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -25,15 +34,27 @@ namespace RD_SharedCode
 		Server_Close
 	}
 
+    /// <summary>
+    /// Exception used when there is a problem reading or writing from the database
+    /// </summary>
     public class DatabaseException : Exception
     {
         public DatabaseException() : base("Database is corrupt") { }
     };
 
+    /// <summary>
+    /// Contains methods and data shared between the various application
+    /// </summary>
 	public class Shared
 	{
 		public const int kMaxNetBuffer = 2048;
 
+        /// <summary>
+        /// Converts byte array to Int32
+        /// </summary>
+        /// <param name="array">array to read from</param>
+        /// <param name="offset">location in array to read from</param>
+        /// <returns>converted 32 bit integer</returns>
 		public static Int32 ByteArrayToInt32(byte[] array, int offset = 0)
 		{
 			Int32 converted =
@@ -45,6 +66,11 @@ namespace RD_SharedCode
 			return converted;
 		}
 
+        /// <summary>
+        /// Converts a 32 bit integer to a byte array
+        /// </summary>
+        /// <param name="data">integer to conver</param>
+        /// <returns>byte array containing integer information</returns>
 		public static byte[] Int32ToByteArray(Int32 data)
 		{
 			byte[] converted = new byte[4];
@@ -58,11 +84,24 @@ namespace RD_SharedCode
 		}
 
 		static UTF8Encoding utf8encoder = new UTF8Encoding();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="size"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
 		public static string ByteArrayToString(byte[] buffer, int size, int offset)
 		{
 			return utf8encoder.GetString(buffer, offset, size);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
 		public static byte[] StringToByteArray(string data)
 		{
 			return utf8encoder.GetBytes(data.ToCharArray());

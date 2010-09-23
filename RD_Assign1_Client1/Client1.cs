@@ -1,4 +1,14 @@
-﻿using System;
+﻿/**
+ * @file
+ * @author  Hekar Kahni, Samuel Lewis
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * A client that automatically sends records to be added to the database
+ * 
+ */
+
+using System;
 using System.Net;
 using System.Collections.Generic;
 using System.Threading;
