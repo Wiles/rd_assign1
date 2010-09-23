@@ -10,6 +10,7 @@
 
 
 using System;
+using System.Xml;
 using System.Collections.Generic;
 using RD_SharedCode;
 
@@ -63,30 +64,34 @@ namespace RD_Assign1
 			switch (command)
 			{
 				case DatabaseMessage.Comm_Insert:
-					try
-					{
-						PerformInsert(buffer);
-					}
-					catch (ArgumentException)
-					{
-						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
-					}
-					catch (KeyNotFoundException)
-					{
-						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
-					}
-					catch (OutOfMemoryException)
-					{
-						ErrorReply(Server, DatabaseMessage.Error_OutOfMemory);
-					}
-					catch (IndexOutOfRangeException)
-					{
-						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
-					}
-					catch (FormatException)
-					{
-						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
-					}   
+                    try
+                    {
+                        PerformInsert(buffer);
+                    }
+                    catch (ArgumentException)
+                    {
+                        ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
+                    }
+                    catch (OutOfMemoryException)
+                    {
+                        ErrorReply(Server, DatabaseMessage.Error_OutOfMemory);
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
+                    }
+                    catch (FormatException)
+                    {
+                        ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
+                    }
+                    catch (XmlException)
+                    {
+                        ErrorReply(Server, DatabaseMessage.Error_DatabaseError);
+                    }
 
 					SuccessReply(Server);
 
@@ -107,7 +112,11 @@ namespace RD_Assign1
 					catch (FormatException)
 					{
 						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
-					}
+                    }
+                    catch (XmlException)
+                    {
+                        ErrorReply(Server, DatabaseMessage.Error_DatabaseError);
+                    }
 
 					SuccessReply(Server);
 
@@ -128,8 +137,11 @@ namespace RD_Assign1
 					catch (IndexOutOfRangeException)
 					{
 						ErrorReply(Server, DatabaseMessage.Error_InvalidArgs);
-					}
-
+                    }
+                    catch (XmlException)
+                    {
+                        ErrorReply(Server, DatabaseMessage.Error_DatabaseError);
+                    }
 					
 					SuccessReply(Server);
 
