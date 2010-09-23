@@ -7,6 +7,13 @@ namespace RD_SharedCode
 	{
 		private const char kSeparator = ',';
 
+        /// <summary>
+        /// Contains a 
+        /// </summary>
+        /// <param name="memberid"></param>
+        /// <param name="firstname"></param>
+        /// <param name="lastname"></param>
+        /// <param name="dateofbirth"></param>
 		public DataRecord(int memberid, string firstname, string lastname, DateTime dateofbirth)
 		{
 			this.MemberID = memberid;
@@ -15,6 +22,11 @@ namespace RD_SharedCode
 			this.DateOfBirth = dateofbirth;
 		}
 
+        /// <summary>
+        /// Convert a delimited string of DataRecord format into a DataRecord
+        /// </summary>
+        /// <param name="data">Delimited string</param>
+        /// <returns>Created DataRecord</returns>
         public static DataRecord FromString(string data)
         {
             // Only take up to the null terminator
