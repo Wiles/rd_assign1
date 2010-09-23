@@ -48,8 +48,8 @@ namespace RD_Assign1_Client1
                         Console.WriteLine("Failed to accept arguments: {0} {1}:", args[i], args[i + 1]);
                         // Print usage statement...
                         Console.WriteLine("Usage: Client1 [-d delay][-p port][-i ipaddress]");
-                    }   
-                }                
+                    }
+                }
             }
 
             Console.WriteLine("(DataClient): Starting...");
@@ -92,9 +92,8 @@ namespace RD_Assign1_Client1
                         Console.WriteLine("(DataClient): Database Error");
                     }
 
-                    Thread.Sleep(delayms);                    
+                    Thread.Sleep(delayms);
                 }
-                
 
                 Console.WriteLine("(DataClient): Disconnecting");
                 client.Disconnect();
