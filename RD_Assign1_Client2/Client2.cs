@@ -8,7 +8,7 @@ namespace RD_Assign1_Client1
 {
     class Program
     {
-    	private const int KQuitValue = -1;
+    	private const int kQuitValue = -1;
         /// <summary>
         /// Runs a client that allows the user to search the database for records and update found records
         /// </summary>
@@ -28,12 +28,12 @@ namespace RD_Assign1_Client1
                     try
                     {
                         //Port
-                        if (args[i] == "-p" && (i + 1) <= argc)
+                        if (args[i] == "-p" && (i + 1) < argc)
                         {
                             port = int.Parse(args[i + 1]);
                         }
                         //Ip address
-                        else if (args[i] == "-i" && (i + 1) <= argc)
+                        else if (args[i] == "-i" && (i + 1) < argc)
                         {
                             ipAddress = IPAddress.Parse(args[i + 1]);
                         }

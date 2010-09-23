@@ -156,7 +156,6 @@ namespace RD_Assign1
         /// Finds the record in the XML file
         /// </summary>
         /// <param name="record">Contains ID of record to find, other information will be entered from record on file</param>
-            {
         private void XMLFindRecord(ref DataRecord record)
         {
             if (!File.Exists(this.xmlFilePath))

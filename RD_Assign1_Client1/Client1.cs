@@ -33,12 +33,12 @@ namespace RD_Assign1_Client1
                             delayms = int.Parse(args[i + 1]);
                         }
                         //Port
-                        else if (args[1] == "-p" && (i + 1) < argc)
+                        else if (args[i] == "-p" && (i + 1) < argc)
                         {
                             port = int.Parse(args[i + 1]);
                         }
                         //ip address
-                        else if (args[1] == "-i" && (i + 1) < argc)
+                        else if (args[i] == "-i" && (i + 1) < argc)
                         {
                             ipAddress = IPAddress.Parse(args[i + 1]);
                         }
