@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Collections.Generic;
 using System.Threading;
 using RD_SharedCode;
@@ -7,28 +8,48 @@ namespace RD_Assign1_Client1
 {
     class Client1
     {
+        /// <summary>
+        /// Runs a client that connects to the server and automatically feeds in random records to add to the database
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int delayms = 1;
 
+            IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
+            int port = 8021;
+            int delayms = 100;
+
+            //Parse Command Line arguments
             int argc = args.GetUpperBound(0);
             if (argc > 2)
             {
                 for (int i = 0; i < argc; i++)
                 {
-                    if (args[i] == "-d" && (i + 1) < argc)
+                    try
                     {
-                        try
+                        //delay
+                        if (args[i] == "-d" && (i + 1) < argc)
                         {
                             delayms = int.Parse(args[i + 1]);
                         }
-                        catch (Exception)
+                        //Port
+                        else if (args[1] == "-p" && (i + 1) < argc)
                         {
-                            Console.WriteLine("Failed to accept arguments: {0} {1}:", args[i], args[i + 1]);
-                            // Print usage statement...
+                            port = int.Parse(args[i + 1]);
+                        }
+                        //ip address
+                        else if (args[1] == "-i" && (i + 1) < argc)
+                        {
+                            ipAddress = IPAddress.Parse(args[i + 1]);
                         }
                     }
-                }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Failed to accept arguments: {0} {1}:", args[i], args[i + 1]);
+                        // Print usage statement...
+                        Console.WriteLine("Usage: Client1 [-d delay][-p port][-i ipaddress]");
+                    }   
+                }                
             }
 
             Console.WriteLine("(DataClient): Starting...");
@@ -37,7 +58,7 @@ namespace RD_Assign1_Client1
                 Random rand = new Random();
                 DatabaseClient client = new DatabaseClient();
                 Console.WriteLine("(DataClient): Connecting");
-                client.Connect("127.0.0.1", 8021);
+                client.Connect(ipAddress.ToString(), port);
 
                 for (int i = 1; i <= 40000; i++)
                 {
@@ -83,6 +104,9 @@ namespace RD_Assign1_Client1
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// List of random names used to create records
+        /// </summary>
         public static string[] kRandomNames = 
         {
             "Jim",
