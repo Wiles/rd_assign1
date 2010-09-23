@@ -1,8 +1,20 @@
-﻿using System;
+﻿/**
+ * @file
+ * @author  Hekar Kahni, Samuel Lewis
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * 
+ */
+
+using System;
 using System.Text;
 
 namespace RD_SharedCode
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public struct DataRecord
 	{
 		private const char kSeparator = ',';
@@ -46,6 +58,11 @@ namespace RD_SharedCode
             return new DataRecord(memid, firstname, lastname, date);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
 		public static DataRecord FromBytes(byte[] buffer)
 		{
 			// Extract the elements from the delimited csv
@@ -57,6 +74,10 @@ namespace RD_SharedCode
             return DataRecord.FromString(data);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             // Create a delimited string for network transfer
@@ -76,6 +97,10 @@ namespace RD_SharedCode
             return builder.ToString();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public byte[] ToBytes()
 		{
             return Shared.StringToByteArray(ToString());

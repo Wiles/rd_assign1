@@ -1,4 +1,14 @@
-﻿using System;
+﻿/**
+ * @file 
+ * @author  Hekar Kahni, Samuel Lewis
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * 
+ */
+
+
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
@@ -6,24 +16,42 @@ using System.Text;
 
 namespace RD_SharedCode
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class DatabaseClient : IDisposable
     {
         Socket client;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public DatabaseClient()
         {
             client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             client.Close();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="port"></param>
         public void Connect(string address, int port)
         {
             client.Connect(new IPEndPoint(IPAddress.Parse(address), port));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Disconnect()
         {
             byte[] sendbuffer = new byte[1];
@@ -34,6 +62,10 @@ namespace RD_SharedCode
             client.Dispose();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="record"></param>
         public void Insert(DataRecord record)
         {
             byte[] sendbuffer = record.ToBytes();
@@ -60,6 +92,10 @@ namespace RD_SharedCode
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="record"></param>
         public void Update(DataRecord record)
         {
             byte[] sendbuffer = record.ToBytes();
@@ -86,6 +122,11 @@ namespace RD_SharedCode
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberid"></param>
+        /// <returns></returns>
         public DataRecord Find(int memberid)
         {
             while (true)

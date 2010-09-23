@@ -1,4 +1,12 @@
-﻿
+﻿/**
+ * @file
+ * @author  Hekar Kahni, Samuel Lewis
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * 
+ */
+
 using System;
 using System.Xml;
 using System.Collections.Generic;

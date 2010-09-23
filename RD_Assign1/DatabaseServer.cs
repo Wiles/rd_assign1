@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file 
  * @author  Hekar Kahni, Samuel Lewis
  * @version 1.0
  *
@@ -7,7 +7,6 @@
  *
  * 
  */
-
 
 using System;
 using System.Net;
@@ -19,6 +18,9 @@ using RD_SharedCode;
 
 namespace RD_Assign1
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public class DatabaseServer : IDisposable
 	{
 		private const int kDefaultPort = 8021;
@@ -49,6 +51,9 @@ namespace RD_Assign1
 			SendMutex = new Mutex();
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public void Dispose()
 		{
 			this.Running = false;
@@ -60,12 +65,21 @@ namespace RD_Assign1
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="port"></param>
 		public void Bind(int port = kDefaultPort)
 		{
 			this.Socket.Bind(new IPEndPoint(0, port));
 			this.Socket.Listen(kBackLog);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <param name="buffer"></param>
 		public void Send(int ID, byte[] buffer)
 		{
             try
@@ -95,6 +109,10 @@ namespace RD_Assign1
             }
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="clientsocket"></param>
 		private void OnClientConnected(Object clientsocket)
 		{
 			Socket client = (Socket)clientsocket;
@@ -144,6 +162,11 @@ namespace RD_Assign1
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="listener"></param>
+        /// <param name="client"></param>
 		private void CloseClientConnection(ISocketListener listener, Socket client)
 		{
             if (client.Connected)
@@ -159,6 +182,9 @@ namespace RD_Assign1
             }
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public void ServerLoop()
 		{
 			while (this.Running)
