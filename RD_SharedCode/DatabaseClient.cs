@@ -53,6 +53,10 @@ namespace RD_SharedCode
 				{
 					throw new OutOfMemoryException();
 				}
+                else if (message == DatabaseMessage.Error_DatabaseError)
+                {
+                    throw new DatabaseException();
+                }
 			}
 		}
 
@@ -74,7 +78,11 @@ namespace RD_SharedCode
 				else if (message == DatabaseMessage.Error_OutOfMemory)
 				{
 					throw new OutOfMemoryException();
-				}
+                }
+                else if (message == DatabaseMessage.Error_DatabaseError)
+                {
+                    throw new DatabaseException();
+                }
 			}
 		}
 
@@ -111,6 +119,10 @@ namespace RD_SharedCode
                     else if (message == DatabaseMessage.Error_ItemNotFound)
                     {
                         throw new KeyNotFoundException();
+                    }
+                    else if (message == DatabaseMessage.Error_DatabaseError)
+                    {
+                        throw new DatabaseException();
                     }
                 }
             }

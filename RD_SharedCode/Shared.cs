@@ -12,6 +12,7 @@ namespace RD_SharedCode
 		Error_InvalidArgs,
 		Error_ItemNotFound,
 		Error_OutOfMemory,
+        Error_DatabaseError,
 
 		Comm_Insert,
 		Comm_Update,
@@ -23,6 +24,11 @@ namespace RD_SharedCode
 		// Tell the server to close our connection
 		Server_Close
 	}
+
+    public class DatabaseException : Exception
+    {
+        public DatabaseException() : base("Database is corrupt") { }
+    };
 
 	public class Shared
 	{
