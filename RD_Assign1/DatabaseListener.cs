@@ -94,12 +94,12 @@ namespace RD_Assign1
 					SuccessReply(Server);
 
 					break;
-				case DatabaseMessage.Comm_Find:
+				case DatabaseMessage.Comm_Find_MemberID:
 					try
 					{
 						DataRecord record = PerformFind(buffer);
 						byte[] sendbuffer = record.ToBytes();
-						sendbuffer[0] = (byte)DatabaseMessage.Client_Find;
+                        sendbuffer[0] = (byte)DatabaseMessage.Client_Found_Record;
 
 						Server.Send(GetID(), sendbuffer);
 					}

@@ -15,10 +15,11 @@ namespace RD_SharedCode
 
 		Comm_Insert,
 		Comm_Update,
-		Comm_Find,
+		Comm_Find_MemberID,
 
 		// Return a finding to the client
-		Client_Find,
+		Client_Found_Record,
+
 		// Tell the server to close our connection
 		Server_Close
 	}
