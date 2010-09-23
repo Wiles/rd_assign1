@@ -7,6 +7,8 @@ namespace RD_Assign1_Client1
 {
     class Program
     {
+        private const int kQuitValue = -1;
+
         static void Main(string[] args)
         {
             int delayms = 1500;
@@ -27,7 +29,7 @@ namespace RD_Assign1_Client1
                     do
                     {
                         success = true;
-                        Console.Write("Enter an integer value (-1 to quit): ");
+                        Console.Write("Enter an integer value ({0} to quit): ", kQuitValue);
                         memid_input = Console.ReadLine();
 
                         try
@@ -45,7 +47,7 @@ namespace RD_Assign1_Client1
                     }
                     while ( !success );
 
-                    if (memid == -1)
+                    if (memid == kQuitValue)
                     {
                         break;
                     }

@@ -29,12 +29,18 @@ namespace RD_Assign1
 		private bool Running = true;
 
 		private Socket Socket;
+        // Our clients according to their unique ids
 		private Dictionary<int, Socket> Clients;
 		private Database database;
 
+        // Control send access on the server socket
 		private Mutex SendMutex;
 		private ManualResetEvent AcceptEvent = new ManualResetEvent(false);
 
+        /// <summary>
+        /// Server that recieves and accepts Database connections from client via TCP/IP
+        /// </summary>
+        /// <param name="database">Database that will recieve messages</param>
 		public DatabaseServer(Database database)
 		{
 			this.Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -62,22 +68,31 @@ namespace RD_Assign1
 
 		public void Send(int ID, byte[] buffer)
 		{
-			try
-			{
-				if (this.Clients[ID].Connected)
-				{
-					SendMutex.WaitOne();
-					this.Clients[ID].Send(buffer);
-					SendMutex.ReleaseMutex();
-				}
-			}
-			catch (KeyNotFoundException ex)
-			{
-				// Client not found
-				Console.WriteLine("(DataServer) Failed to Respond to Client {0}", ID);
-				Console.WriteLine("(DataServer) \tException: {0}", ex.Message);
-
-			}
+            try
+            {
+                if (this.Clients.ContainsKey(ID))
+                {
+                    this.SendMutex.WaitOne();
+                    this.Clients[ID].Send(buffer);
+                    this.SendMutex.ReleaseMutex();
+                }
+                else
+                {
+                    throw new KeyNotFoundException();
+                }
+            }
+            catch (KeyNotFoundException ex)
+            {
+                // Client not found
+                Console.WriteLine("(DataServer) Failed to Respond to Client {0}", ID);
+                Console.WriteLine("(DataServer) \tException: {0}", ex.Message);
+            }
+            catch (SocketException)
+            {
+                Console.WriteLine("(DataServer) Errornous Client Disconnection");
+                this.Clients.Remove(ID);
+                this.SendMutex.ReleaseMutex();
+            }
 		}
 
 		private void OnClientConnected(Object clientsocket)
@@ -131,9 +146,17 @@ namespace RD_Assign1
 
 		private void CloseClientConnection(ISocketListener listener, Socket client)
 		{
-			listener.OnClose(this);
-			client.Close();
-			this.Clients.Remove(client.GetHashCode());
+            if (client.Connected)
+            {
+                listener.OnClose(this);
+                client.Close();
+                this.Clients.Remove(client.GetHashCode());
+            }
+            else
+            {
+                client.Dispose();
+                this.Clients.Remove(client.GetHashCode());
+            }
 		}
 
 		public void ServerLoop()
