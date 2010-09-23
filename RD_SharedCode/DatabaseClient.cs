@@ -6,77 +6,85 @@ using System.Text;
 
 namespace RD_SharedCode
 {
-	public class DatabaseClient : IDisposable
-	{
-		Socket client;
-		public DatabaseClient()
-		{
-			client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-		}
+    public class DatabaseClient : IDisposable
+    {
+        Socket client;
+        public DatabaseClient()
+        {
+            client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        }
 
-		public void Dispose()
-		{
-			client.Close();
-		}
+        public void Dispose()
+        {
+            client.Close();
+        }
 
-		public void Connect(string address, int port)
-		{
-			client.Connect(new IPEndPoint(IPAddress.Parse(address), port));
-		}
+        public void Connect(string address, int port)
+        {
+            client.Connect(new IPEndPoint(IPAddress.Parse(address), port));
+        }
 
-		public void Disconnect()
-		{
-            byte[] sendbuffer =  new byte[1];
+        public void Disconnect()
+        {
+            byte[] sendbuffer = new byte[1];
             sendbuffer[0] = (byte)DatabaseMessage.Server_Close;
             client.Send(sendbuffer);
 
             client.Disconnect(false);
-			client.Dispose();
-		}
+            client.Dispose();
+        }
 
-		public void Insert(DataRecord record)
-		{
-			byte[] sendbuffer = record.ToBytes();
-			sendbuffer[0] = (byte)DatabaseMessage.Comm_Insert;
-			client.Send(sendbuffer);
+        public void Insert(DataRecord record)
+        {
+            byte[] sendbuffer = record.ToBytes();
+            sendbuffer[0] = (byte)DatabaseMessage.Comm_Insert;
+            client.Send(sendbuffer);
 
-			// Listen for Response
-			byte[] recvbuffer = new byte[Shared.kMaxNetBuffer];
-			if (client.Receive(recvbuffer) > 0)
-			{
-				DatabaseMessage message = (DatabaseMessage)recvbuffer[0];
-				if (message == DatabaseMessage.Error_InvalidArgs)
-				{
-					throw new ArgumentException();
-				}
-				else if (message == DatabaseMessage.Error_OutOfMemory)
-				{
-					throw new OutOfMemoryException();
-				}
-			}
-		}
+            // Listen for Response
+            byte[] recvbuffer = new byte[Shared.kMaxNetBuffer];
+            if (client.Receive(recvbuffer) > 0)
+            {
+                DatabaseMessage message = (DatabaseMessage)recvbuffer[0];
+                if (message == DatabaseMessage.Error_InvalidArgs)
+                {
+                    throw new ArgumentException();
+                }
+                else if (message == DatabaseMessage.Error_OutOfMemory)
+                {
+                    throw new OutOfMemoryException();
+                }
+                else if (message == DatabaseMessage.Error_DatabaseError)
+                {
+                    throw new DatabaseException();
+                }
+            }
+        }
 
-		public void Update(DataRecord record)
-		{
-			byte[] sendbuffer = record.ToBytes();
-			sendbuffer[0] = (byte)DatabaseMessage.Comm_Update;
-			client.Send(sendbuffer);
+        public void Update(DataRecord record)
+        {
+            byte[] sendbuffer = record.ToBytes();
+            sendbuffer[0] = (byte)DatabaseMessage.Comm_Update;
+            client.Send(sendbuffer);
 
-			// Listen for Response
-			byte[] recvbuffer = new byte[Shared.kMaxNetBuffer];
-			if (client.Receive(recvbuffer) > 0)
-			{
-				DatabaseMessage message = (DatabaseMessage)recvbuffer[0];
-				if (message == DatabaseMessage.Error_InvalidArgs)
-				{
-					throw new ArgumentException();
-				}
-				else if (message == DatabaseMessage.Error_OutOfMemory)
-				{
-					throw new OutOfMemoryException();
-				}
-			}
-		}
+            // Listen for Response
+            byte[] recvbuffer = new byte[Shared.kMaxNetBuffer];
+            if (client.Receive(recvbuffer) > 0)
+            {
+                DatabaseMessage message = (DatabaseMessage)recvbuffer[0];
+                if (message == DatabaseMessage.Error_InvalidArgs)
+                {
+                    throw new ArgumentException();
+                }
+                else if (message == DatabaseMessage.Error_OutOfMemory)
+                {
+                    throw new OutOfMemoryException();
+                }
+                else if (message == DatabaseMessage.Error_DatabaseError)
+                {
+                    throw new DatabaseException();
+                }
+            }
+        }
 
         public DataRecord Find(int memberid)
         {
@@ -112,11 +120,15 @@ namespace RD_SharedCode
                     {
                         throw new KeyNotFoundException();
                     }
+                    else if (message == DatabaseMessage.Error_DatabaseError)
+                    {
+                        throw new DatabaseException();
+                    }
                 }
             }
 
             throw new FormatException();
         }
 
-	}
+    }
 }

@@ -26,8 +26,6 @@ namespace RD_Assign1
     {
         // Default allocation for database
         private const int kDefaultMaxCapacity = 40000;
-
-        //private SortedList<int, DataRecord> Records;
         private Mutex WriteMutex;
         private string xmlFilePath;
         private int CurrentMemberID;
@@ -38,7 +36,6 @@ namespace RD_Assign1
         /// <param name="xmlFile">Filename of XML storage</param>
         public Database(string xmlFile)
         {
-            //this.Records = new SortedList<int, DataRecord>(kDefaultMaxCapacity);
             this.WriteMutex = new Mutex();
             xmlFilePath = xmlFile;
             this.XMLFindHighestMemberID();
@@ -46,15 +43,36 @@ namespace RD_Assign1
 
         /// <summary>
         /// Update the values of a record in the database.
+        /// If that record does not exist in the database an KeyNotFoundException will be thrown
         /// </summary>
         /// <param name="record">Record who's corresponding memberid will be updated.</param>
         public void Update(DataRecord record)
         {
-            //this.WriteMutex.WaitOne();
-            //this.Records[record.MemberID - 1] = record;
-            //this.WriteMutex.ReleaseMutex();
-            this.XMLRemoveRecord(record.MemberID);
-            this.XMLAppendRecord(record);
+            this.WriteMutex.WaitOne();
+            if (!File.Exists(this.xmlFilePath))
+            {
+                throw new KeyNotFoundException();
+            }
+
+            XmlDocument xmlDoc = new XmlDocument();
+
+            xmlDoc.Load(this.xmlFilePath);
+
+            string searchQuery = "/Members/Member[@ID='" + record.MemberID.ToString() + "']";
+
+            XmlNodeList xmlNodes = xmlDoc.SelectNodes(searchQuery);
+
+            if (xmlNodes.Count != 1)
+            {
+                throw new KeyNotFoundException();
+            }
+
+            xmlNodes[0].Attributes[0].Value = record.MemberID.ToString();
+            xmlNodes[0].ChildNodes[0].InnerText = record.FirstName;
+            xmlNodes[0].ChildNodes[1].InnerText = record.LastName;
+            xmlNodes[0].ChildNodes[2].InnerText = record.DateOfBirth.ToString();
+            xmlDoc.Save(this.xmlFilePath);
+            this.WriteMutex.ReleaseMutex();
         }
 
         /// <summary>
@@ -71,7 +89,6 @@ namespace RD_Assign1
             this.WriteMutex.WaitOne();
             ++this.CurrentMemberID;
             record.MemberID = CurrentMemberID;
-            //this.Records.Add(record.MemberID - 1, record);
             this.XMLAppendRecord(record);
 
             Console.WriteLine("Record Added");
@@ -89,11 +106,18 @@ namespace RD_Assign1
         {
             DataRecord record = new DataRecord();
             record.MemberID = MemberID;
+
+            this.WriteMutex.WaitOne();
             this.XMLFindRecord(ref record);
+            this.WriteMutex.ReleaseMutex();
+
             return record;
-            //return this.Records[MemberID - 1];
         }
 
+        /// <summary>
+        /// Adds a record to the end of the XML document
+        /// </summary>
+        /// <param name="record">Record to add</param>
         private void XMLAppendRecord(DataRecord record)
         {
             if (!File.Exists(this.xmlFilePath))
@@ -128,29 +152,11 @@ namespace RD_Assign1
             xmlDoc.Save(this.xmlFilePath);
         }
 
-        private void XMLRemoveRecord(int MemberID)
-        {
-            if (!File.Exists(this.xmlFilePath))
+        /// <summary>
+        /// Finds the record in the XML file
+        /// </summary>
+        /// <param name="record">Contains ID of record to find, other information will be entered from record on file</param>
             {
-                throw new KeyNotFoundException();
-            }
-
-            XmlDocument xmlDoc = new XmlDocument();
-
-            xmlDoc.Load(this.xmlFilePath);
-
-            string searchQuery = "/Members/Member[@ID='" + MemberID.ToString() + "']";
-
-            XmlNodeList xmlNodes = xmlDoc.SelectNodes(searchQuery);
-
-            if (xmlNodes.Count != 1)
-            {
-                throw new KeyNotFoundException();
-            }
-
-            xmlNodes[0].ParentNode.RemoveChild((XmlNode)xmlNodes[0]);
-        }
-
         private void XMLFindRecord(ref DataRecord record)
         {
             if (!File.Exists(this.xmlFilePath))
@@ -178,6 +184,9 @@ namespace RD_Assign1
 
         }
 
+        /// <summary>
+        /// Sets up the XML file if it does not already exist
+        /// </summary>
         private void XMLCreateFile()
         {
             XmlTextWriter newDoc = new XmlTextWriter(this.xmlFilePath, null);
@@ -188,6 +197,9 @@ namespace RD_Assign1
             newDoc.Close();
         }
 
+        /// <summary>
+        /// Finds the highest MemberID used in the XML file
+        /// </summary>
         private void XMLFindHighestMemberID()
         {
             if (!File.Exists(this.xmlFilePath))
@@ -195,7 +207,7 @@ namespace RD_Assign1
                 this.CurrentMemberID = 0;
                 return;
             }
-
+            
             XmlDocument xmlDoc = new XmlDocument();
 
             xmlDoc.Load(this.xmlFilePath);
@@ -204,7 +216,6 @@ namespace RD_Assign1
 
             foreach (XmlNode node in nodeList)
             {
-
                 int nodeMemberID = int.Parse(node.Attributes[0].InnerText);
 
                 if (nodeMemberID > this.CurrentMemberID)
@@ -212,7 +223,6 @@ namespace RD_Assign1
                     this.CurrentMemberID = nodeMemberID;
                 }
             }
-
         }
     }
 }
