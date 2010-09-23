@@ -87,9 +87,14 @@ namespace RD_Assign1_Client1
                     {
                         Console.WriteLine("(DataClient): Database is full");
                     }
+                    catch (DatabaseException)
+                    {
+                        Console.WriteLine("(DataClient): Database Error");
+                    }
 
-                    Thread.Sleep(delayms);
+                    Thread.Sleep(delayms);                    
                 }
+                
 
                 Console.WriteLine("(DataClient): Disconnecting");
                 client.Disconnect();

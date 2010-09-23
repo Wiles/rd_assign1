@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Xml;
 using System.Collections.Generic;
 using RD_SharedCode;
 
@@ -27,6 +28,10 @@ namespace RD_Assign1
 				server.ServerLoop();
 				Console.WriteLine("(DataServer): Exiting Message Loop.");
 			}
+            catch (XmlException)
+            {
+                Console.WriteLine("(DataServer): Database Error");
+            }
 			catch (Exception ex)
 			{
                 Console.WriteLine("Message: {0}", ex.Message);

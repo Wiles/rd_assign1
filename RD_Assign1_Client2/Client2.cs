@@ -153,6 +153,11 @@ namespace RD_Assign1_Client1
                         Console.WriteLine("(FindClient): Failure to recieve valid response");
                         continue;
                     }
+
+                    catch (DatabaseException)
+                    {
+                        Console.WriteLine("(DataClient): Database Error");
+                    }
                 }
 
                 Console.WriteLine("(FindClient): Disconnecting");
