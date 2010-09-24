@@ -13,19 +13,19 @@ using System.Text;
 namespace RD_SharedCode
 {
     /// <summary>
-    /// 
+    /// Contains a record for the "Database"
     /// </summary>
 	public struct DataRecord
 	{
 		private const char kSeparator = ',';
 
         /// <summary>
-        /// Contains a 
+        /// Contains a record for the "Database"
         /// </summary>
-        /// <param name="memberid"></param>
-        /// <param name="firstname"></param>
-        /// <param name="lastname"></param>
-        /// <param name="dateofbirth"></param>
+        /// <param name="memberid">Unique ID of the record</param>
+        /// <param name="firstname">Firstname of individual</param>
+        /// <param name="lastname">Lastname of individual</param>
+        /// <param name="dateofbirth">Individuals date of birth</param>
 		public DataRecord(int memberid, string firstname, string lastname, DateTime dateofbirth)
 		{
 			this.MemberID = memberid;
@@ -35,7 +35,7 @@ namespace RD_SharedCode
 		}
 
         /// <summary>
-        /// Convert a delimited string of DataRecord format into a DataRecord
+        /// Convert a delimited string of DataRecord format into a DataRecord Object
         /// </summary>
         /// <param name="data">Delimited string</param>
         /// <returns>Created DataRecord</returns>
@@ -59,10 +59,10 @@ namespace RD_SharedCode
         }
 
         /// <summary>
-        /// 
+        /// Converts a DataRecord format buffer into a DataRecord Object
         /// </summary>
-        /// <param name="buffer"></param>
-        /// <returns></returns>
+        /// <param name="buffer">DataRecord format buffer</param>
+        /// <returns>DataRecord Object</returns>
 		public static DataRecord FromBytes(byte[] buffer)
 		{
 			// Extract the elements from the delimited csv
@@ -75,9 +75,9 @@ namespace RD_SharedCode
 		}
 
         /// <summary>
-        /// 
+        /// Convert the DataRecord to a DataRecord String
         /// </summary>
-        /// <returns></returns>
+        /// <returns>DataRecord formatted String</returns>
         public override string ToString()
         {
             // Create a delimited string for network transfer
@@ -98,9 +98,9 @@ namespace RD_SharedCode
         }
 
         /// <summary>
-        /// 
+        /// Convert DataRecord to DataRecord format buffer
         /// </summary>
-        /// <returns></returns>
+        /// <returns>DataRecord formatted buffer</returns>
 		public byte[] ToBytes()
 		{
             return Shared.StringToByteArray(ToString());

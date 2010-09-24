@@ -19,7 +19,7 @@ using RD_SharedCode;
 namespace RD_Assign1
 {
     /// <summary>
-    /// 
+    /// Socket server for Database backend
     /// </summary>
 	public class DatabaseServer : IDisposable
 	{
@@ -52,7 +52,7 @@ namespace RD_Assign1
 		}
 
         /// <summary>
-        /// 
+        /// Releases the resources of the DatabaseServer
         /// </summary>
 		public void Dispose()
 		{
@@ -66,9 +66,9 @@ namespace RD_Assign1
 		}
 
         /// <summary>
-        /// 
+        /// Bind the Socket to its port
         /// </summary>
-        /// <param name="port"></param>
+        /// <param name="port">Port to bind to</param>
 		public void Bind(int port = kDefaultPort)
 		{
 			this.Socket.Bind(new IPEndPoint(0, port));
@@ -76,10 +76,10 @@ namespace RD_Assign1
 		}
 
         /// <summary>
-        /// 
+        /// Send a buffer to a particular client
         /// </summary>
-        /// <param name="ID"></param>
-        /// <param name="buffer"></param>
+        /// <param name="ID">Hashcode identifier of the client</param>
+        /// <param name="buffer">Buffer to send over the network</param>
 		public void Send(int ID, byte[] buffer)
 		{
             try
@@ -110,9 +110,9 @@ namespace RD_Assign1
 		}
 
         /// <summary>
-        /// 
+        /// Executed on the connection of a client
         /// </summary>
-        /// <param name="clientsocket"></param>
+        /// <param name="clientsocket">Client's socket object</param>
 		private void OnClientConnected(Object clientsocket)
 		{
 			Socket client = (Socket)clientsocket;
@@ -163,10 +163,10 @@ namespace RD_Assign1
 		}
 
         /// <summary>
-        /// 
+        /// Executed on clientconnection closed
         /// </summary>
-        /// <param name="listener"></param>
-        /// <param name="client"></param>
+        /// <param name="listener">Listener to send events to</param>
+        /// <param name="client">Client socket being closed</param>
 		private void CloseClientConnection(ISocketListener listener, Socket client)
 		{
             if (client.Connected)
@@ -183,7 +183,7 @@ namespace RD_Assign1
 		}
 
         /// <summary>
-        /// 
+        /// Listening Loop doesn't exit until DatabaseServer is disposed
         /// </summary>
 		public void ServerLoop()
 		{
