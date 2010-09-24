@@ -17,64 +17,64 @@ using System.Text;
 namespace RD_SharedCode
 {
     /// <summary>
-    /// 
+    /// Client connection to DatabaseServer
     /// </summary>
     public class DatabaseClient : IDisposable
     {
-        Socket client;
+		Socket Client;
 
         /// <summary>
-        /// 
+        /// Client connection DatabaseServer
         /// </summary>
         public DatabaseClient()
         {
-            client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+			Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
         /// <summary>
-        /// 
+        /// Release allocated resources
         /// </summary>
         public void Dispose()
         {
-            client.Close();
+			Client.Close();
         }
 
         /// <summary>
-        /// 
+        /// Connect to IP4 Address of client
         /// </summary>
-        /// <param name="address"></param>
-        /// <param name="port"></param>
+        /// <param name="address">Address in string form ie. "127.0.0.1"</param>
+        /// <param name="port">Port to connect o</param>
         public void Connect(string address, int port)
         {
-            client.Connect(new IPEndPoint(IPAddress.Parse(address), port));
+			Client.Connect(new IPEndPoint(IPAddress.Parse(address), port));
         }
 
         /// <summary>
-        /// 
+        /// Disconnect from server
         /// </summary>
         public void Disconnect()
         {
             byte[] sendbuffer = new byte[1];
             sendbuffer[0] = (byte)DatabaseMessage.Server_Close;
-            client.Send(sendbuffer);
+            Client.Send(sendbuffer);
 
-            client.Disconnect(false);
-            client.Dispose();
+            Client.Disconnect(false);
+			Client.Dispose();
         }
 
         /// <summary>
-        /// 
+        /// Insert a record into the connected Database
         /// </summary>
-        /// <param name="record"></param>
+        /// <param name="record">Record to insert (memberid ignored)</param>
         public void Insert(DataRecord record)
         {
             byte[] sendbuffer = record.ToBytes();
             sendbuffer[0] = (byte)DatabaseMessage.Comm_Insert;
-            client.Send(sendbuffer);
+			Client.Send(sendbuffer);
 
             // Listen for Response
             byte[] recvbuffer = new byte[Shared.kMaxNetBuffer];
-            if (client.Receive(recvbuffer) > 0)
+			if (Client.Receive(recvbuffer) > 0)
             {
                 DatabaseMessage message = (DatabaseMessage)recvbuffer[0];
                 if (message == DatabaseMessage.Error_InvalidArgs)
@@ -93,18 +93,18 @@ namespace RD_SharedCode
         }
 
         /// <summary>
-        /// 
+        /// Update a record in the connected Database server
         /// </summary>
-        /// <param name="record"></param>
+        /// <param name="record">New contains of Record</param>
         public void Update(DataRecord record)
         {
             byte[] sendbuffer = record.ToBytes();
             sendbuffer[0] = (byte)DatabaseMessage.Comm_Update;
-            client.Send(sendbuffer);
+			Client.Send(sendbuffer);
 
             // Listen for Response
             byte[] recvbuffer = new byte[Shared.kMaxNetBuffer];
-            if (client.Receive(recvbuffer) > 0)
+			if (Client.Receive(recvbuffer) > 0)
             {
                 DatabaseMessage message = (DatabaseMessage)recvbuffer[0];
                 if (message == DatabaseMessage.Error_InvalidArgs)
@@ -123,21 +123,21 @@ namespace RD_SharedCode
         }
 
         /// <summary>
-        /// 
+        /// Find a record in the connected Database server and wait for the return
         /// </summary>
-        /// <param name="memberid"></param>
-        /// <returns></returns>
+        /// <param name="memberid">Memberid of the record to download</param>
+        /// <returns>Retrieved record</returns>
         public DataRecord Find(int memberid)
         {
             while (true)
             {
                 byte[] sendbuffer = new DataRecord(memberid, "", "", DateTime.Now).ToBytes();
                 sendbuffer[0] = (byte)DatabaseMessage.Comm_Find_MemberID;
-                client.Send(sendbuffer);
+                Client.Send(sendbuffer);
 
                 // Listen for Response
                 byte[] recvbuffer = new byte[Shared.kMaxNetBuffer];
-                if (client.Receive(recvbuffer) > 0)
+                if (Client.Receive(recvbuffer) > 0)
                 {
                     DatabaseMessage message = (DatabaseMessage)recvbuffer[0];
                     if (message == DatabaseMessage.Success)

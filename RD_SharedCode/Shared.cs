@@ -86,22 +86,22 @@ namespace RD_SharedCode
 		static UTF8Encoding utf8encoder = new UTF8Encoding();
 
         /// <summary>
-        /// 
+        /// Convert a UTF8 Byte Array into a UTF8 String
         /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="size"></param>
-        /// <param name="offset"></param>
-        /// <returns></returns>
+        /// <param name="buffer">Buffer to convert</param>
+        /// <param name="size">Size of buffer</param>
+        /// <param name="offset">Start of buffer</param>
+        /// <returns>Converted String</returns>
 		public static string ByteArrayToString(byte[] buffer, int size, int offset)
 		{
 			return utf8encoder.GetString(buffer, offset, size);
 		}
 
         /// <summary>
-        /// 
+        /// Convert a UTF8 String into a Byte Array
         /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
+        /// <param name="data">UTF8 String to convert</param>
+        /// <returns>Converted UTF8 Buffer</returns>
 		public static byte[] StringToByteArray(string data)
 		{
 			return utf8encoder.GetBytes(data.ToCharArray());
