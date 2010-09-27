@@ -6,7 +6,7 @@ namespace RD_Assign1_Client1
 {
     class RandNames
     {
-        public static string[] kRandomNames = 
+        public static string[] kRandomNames =
         {
             "Jim",
             "Bob",

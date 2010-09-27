@@ -4,7 +4,7 @@
  * @version 1.0
  *
  * @section DESCRIPTION
- * 
+ *
  */
 
 using System;
@@ -15,9 +15,9 @@ namespace RD_SharedCode
     /// <summary>
     /// Contains a record for the "Database"
     /// </summary>
-	public struct DataRecord
-	{
-		private const char kSeparator = ',';
+    public struct DataRecord
+    {
+        private const char kSeparator = ',';
 
         /// <summary>
         /// Contains a record for the "Database"
@@ -26,13 +26,13 @@ namespace RD_SharedCode
         /// <param name="firstname">Firstname of individual</param>
         /// <param name="lastname">Lastname of individual</param>
         /// <param name="dateofbirth">Individuals date of birth</param>
-		public DataRecord(int memberid, string firstname, string lastname, DateTime dateofbirth)
-		{
-			this.MemberID = memberid;
-			this.FirstName = firstname;
-			this.LastName = lastname;
-			this.DateOfBirth = dateofbirth;
-		}
+        public DataRecord(int memberid, string firstname, string lastname, DateTime dateofbirth)
+        {
+            this.MemberID = memberid;
+            this.FirstName = firstname;
+            this.LastName = lastname;
+            this.DateOfBirth = dateofbirth;
+        }
 
         /// <summary>
         /// Convert a delimited string of DataRecord format into a DataRecord Object
@@ -44,7 +44,7 @@ namespace RD_SharedCode
             // Only take up to the null terminator
             int nullindex = data.IndexOf('\0');
             if (nullindex > 0)
-            {                        
+            {
                 data = data.Substring(0, nullindex);
             }
 
@@ -63,16 +63,16 @@ namespace RD_SharedCode
         /// </summary>
         /// <param name="buffer">DataRecord format buffer</param>
         /// <returns>DataRecord Object</returns>
-		public static DataRecord FromBytes(byte[] buffer)
-		{
-			// Extract the elements from the delimited csv
-			string data = Shared.ByteArrayToString(buffer, buffer.Length, 0);
+        public static DataRecord FromBytes(byte[] buffer)
+        {
+            // Extract the elements from the delimited csv
+            string data = Shared.ByteArrayToString(buffer, buffer.Length, 0);
 
-			// Only take up to the null terminator
-			data = data.Substring(0, data.IndexOf('\0'));
+            // Only take up to the null terminator
+            data = data.Substring(0, data.IndexOf('\0'));
 
             return DataRecord.FromString(data);
-		}
+        }
 
         /// <summary>
         /// Convert the DataRecord to a DataRecord String
@@ -101,14 +101,14 @@ namespace RD_SharedCode
         /// Convert DataRecord to DataRecord format buffer
         /// </summary>
         /// <returns>DataRecord formatted buffer</returns>
-		public byte[] ToBytes()
-		{
+        public byte[] ToBytes()
+        {
             return Shared.StringToByteArray(ToString());
-		}
+        }
 
-		public int MemberID;
-		public string FirstName;
-		public string LastName;
-		public DateTime DateOfBirth;
-	}
+        public int MemberID;
+        public string FirstName;
+        public string LastName;
+        public DateTime DateOfBirth;
+    }
 }

@@ -5,7 +5,7 @@
  *
  * @section DESCRIPTION
  * A client that allows the user to search and update the database
- * 
+ *
  */
 
 using System;
@@ -18,7 +18,7 @@ namespace RD_Assign1_Client1
 {
     class Program
     {
-    	private const int kQuitValue = -1;
+        private const int kQuitValue = -1;
 
         /// <summary>
         /// Runs a client that allows the user to search the database for records and update found records

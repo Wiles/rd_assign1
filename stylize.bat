@@ -1,0 +1,1 @@
+AStyle.exe -R --indent=spaces --indent=spaces=4 --indent-namespaces --indent-col1-comments *.cs

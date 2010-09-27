@@ -6,7 +6,7 @@
  * @section DESCRIPTION
  * Simple Database class that contains Insert, Update, and Find.
  * XML is used to save and retrieve information from the database
- * 
+ *
  */
 
 
@@ -93,7 +93,7 @@ namespace RD_Assign1
 
             Console.WriteLine("Record Added");
             Console.WriteLine("\tId: {0}\n\tFirstName: {1}\n\tLastName: {2}\n\tDateOfBirth: {3}\n",
-                record.MemberID, record.FirstName, record.LastName, record.DateOfBirth);
+                              record.MemberID, record.FirstName, record.LastName, record.DateOfBirth);
             this.WriteMutex.ReleaseMutex();
         }
 
@@ -206,7 +206,7 @@ namespace RD_Assign1
                 this.CurrentMemberID = 0;
                 return;
             }
-            
+
             XmlDocument xmlDoc = new XmlDocument();
 
             xmlDoc.Load(this.xmlFilePath);
