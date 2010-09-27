@@ -1,10 +1,10 @@
 ﻿/**
- * @file 
+ * @file
  * @author  Hekar Kahni, Samuel Lewis
  * @version 1.0
  *
  * @section DESCRIPTION
- * 
+ *
  */
 
 
@@ -21,14 +21,14 @@ namespace RD_SharedCode
     /// </summary>
     public class DatabaseClient : IDisposable
     {
-		Socket Client;
+        Socket Client;
 
         /// <summary>
         /// Client connection DatabaseServer
         /// </summary>
         public DatabaseClient()
         {
-			Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace RD_SharedCode
         /// </summary>
         public void Dispose()
         {
-			Client.Close();
+            Client.Close();
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace RD_SharedCode
         /// <param name="port">Port to connect o</param>
         public void Connect(string address, int port)
         {
-			Client.Connect(new IPEndPoint(IPAddress.Parse(address), port));
+            Client.Connect(new IPEndPoint(IPAddress.Parse(address), port));
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace RD_SharedCode
             Client.Send(sendbuffer);
 
             Client.Disconnect(false);
-			Client.Dispose();
+            Client.Dispose();
         }
 
         /// <summary>
@@ -70,11 +70,11 @@ namespace RD_SharedCode
         {
             byte[] sendbuffer = record.ToBytes();
             sendbuffer[0] = (byte)DatabaseMessage.Comm_Insert;
-			Client.Send(sendbuffer);
+            Client.Send(sendbuffer);
 
             // Listen for Response
             byte[] recvbuffer = new byte[Shared.kMaxNetBuffer];
-			if (Client.Receive(recvbuffer) > 0)
+            if (Client.Receive(recvbuffer) > 0)
             {
                 DatabaseMessage message = (DatabaseMessage)recvbuffer[0];
                 if (message == DatabaseMessage.Error_InvalidArgs)
@@ -100,11 +100,11 @@ namespace RD_SharedCode
         {
             byte[] sendbuffer = record.ToBytes();
             sendbuffer[0] = (byte)DatabaseMessage.Comm_Update;
-			Client.Send(sendbuffer);
+            Client.Send(sendbuffer);
 
             // Listen for Response
             byte[] recvbuffer = new byte[Shared.kMaxNetBuffer];
-			if (Client.Receive(recvbuffer) > 0)
+            if (Client.Receive(recvbuffer) > 0)
             {
                 DatabaseMessage message = (DatabaseMessage)recvbuffer[0];
                 if (message == DatabaseMessage.Error_InvalidArgs)

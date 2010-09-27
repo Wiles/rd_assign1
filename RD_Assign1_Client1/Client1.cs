@@ -5,7 +5,7 @@
  *
  * @section DESCRIPTION
  * A client that automatically sends records to be added to the database
- * 
+ *
  */
 
 using System;
@@ -121,7 +121,7 @@ namespace RD_Assign1_Client1
         /// <summary>
         /// List of random names used to create records
         /// </summary>
-        public static string[] kRandomNames = 
+        public static string[] kRandomNames =
         {
             "Jim",
             "Bob",
